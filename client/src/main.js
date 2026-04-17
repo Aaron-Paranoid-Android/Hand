@@ -134,7 +134,7 @@ const loader = new GLTFLoader();
 
 loader.load( 
 
-  '/models/robot_hand/robot_hand.gltf', 
+  '/models/robot_hand/scene.gltf', 
 
   (gltf) => { 
 
