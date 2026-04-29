@@ -584,6 +584,29 @@ function buildUI() {
 
   }; 
 
+  const hangLoose = document.createElement('button');
+  hangLoose.textContent = 'Hang Loose';
+  hangLoose.onclick = () => {
+    setFingerValue('thumb', 0);
+    setFingerValue('index', 90);
+    setFingerValue('middle', 90);
+    setFingerValue('ring', 90);
+    setFingerValue('pinky', 0);
+    syncModel();
+  };
+
+  const Rock = document.createElement('button');
+  Rock.textContent = 'Rock';
+  Rock.onclick = () => {
+    setFingerValue('thumb', 90);
+    setFingerValue('index', 0);
+    setFingerValue('middle', 90);
+    setFingerValue('ring', 90);
+    setFingerValue('pinky', 0);
+    syncModel();
+  };
+
+
  
 
   buttonRow.appendChild(openBtn); 
@@ -591,6 +614,10 @@ function buildUI() {
   buttonRow.appendChild(closeBtn); 
 
   buttonRow.appendChild(pointBtn); 
+
+  buttonRow.appendChild(hangLoose);
+
+  buttonRow.appendChild(Rock);
 
   panel.appendChild(buttonRow); 
 
