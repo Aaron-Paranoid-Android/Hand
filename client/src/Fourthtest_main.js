@@ -205,6 +205,72 @@ function printCurrentMappings() {
 }
 
 // =========================================
+// Flex sensor
+// =========================================
+
+let serial;  
+
+let latestData = 0;  
+
+let latestData2 = 0; //will use in Ex4 
+
+let currentAngle = 0;  
+
+let targetAngle = 0;  
+
+let easing = 0.12;  
+
+function setupSerial() { 
+
+  serial = new p5.SerialPort(); 
+
+  // List available ports in console 
+
+  serial.list(); 
+
+  // TODO: replace with your port (e.g., 'COM3' on Windows, '/dev/ttyACM0' on Linux) 
+
+  // You can also use p5.serialcontrol to pick the port. 
+
+  serial.open('COM10'); 
+
+  serial.on('data', gotData); 
+
+} 
+
+function gotData() { 
+
+  let currentString = serial.readLine(); 
+
+  if (!currentString) return; 
+
+  currentString = currentString.trim(); 
+
+  if (!currentString) return; 
+
+  let num = Number(currentString); 
+
+  if (!isNaN(num)) { 
+
+    latestData = num; 
+
+  } 
+
+} 
+
+ targetAngle = map(latestData, 300, 11, -20, 100);  
+
+  targetAngle = constrain(targetAngle, -20, 100);  
+
+  // Easing toward target  
+
+  let diff = targetAngle - currentAngle;  
+
+  currentAngle += diff * easing;  
+
+  setupSerial();
+
+// =========================================
 // UI
 // =========================================
 function createSliderRow(label, key) {
@@ -286,16 +352,40 @@ function buildUI() {
   pointBtn.textContent = 'Point';
   pointBtn.onclick = () => {
     setFingerValue('thumb', 20);
-    setFingerValue('index', 0);
+    setFingerValue('index', currentAngle); // Use the angle from the flex sensor for the index finger
     setFingerValue('middle', 45);
     setFingerValue('ring', 45);
     setFingerValue('pinky', 45);
     syncModel();
   };
 
+  const hangLoose = document.createElement('button');
+  hangLoose.textContent = 'Open Hand';
+  hangLoose.onclick = () => {
+    setFingerValue('thumb', 0);
+    setFingerValue('index', 90);
+    setFingerValue('middle', 90);
+    setFingerValue('ring', 90);
+    setFingerValue('pinky', 0);
+    syncModel();
+  };
+
+  const Rock = document.createElement('button');
+  Rock.textContent = 'Open Hand';
+  Rock.onclick = () => {
+    setFingerValue('thumb', 0);
+    setFingerValue('index', 0);
+    setFingerValue('middle', 0);
+    setFingerValue('ring', 0);
+    setFingerValue('pinky', 0);
+    syncModel();
+  };
+
   buttonRow.appendChild(openBtn);
   buttonRow.appendChild(closeBtn);
   buttonRow.appendChild(pointBtn);
+  buttonRow.appendChild(hangLoose);
+  buttonRow.appendChild(Rock);
   panel.appendChild(buttonRow);
 
   const debugRow = document.createElement('div');
